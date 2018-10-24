@@ -53,7 +53,7 @@ class Pages(object):
                     text = f.read()
                     soup = BeautifulSoup(text, 'lxml')
                     title = soup.find('h1').text.rstrip('¶')
-                    text = re.sub('\<title\>.*?\<\/title\>', f'<title>{config.title} | {title}</title>', text)
+                    text = re.sub('\<title\>.*?\<\/title\>', f'<title>{config.author} | {title}</title>', text)
                     text = text.replace('</body>', comment_code + '</body>')
                     f.seek(0)
                     f.write(text)
