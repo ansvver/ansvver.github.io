@@ -74,14 +74,17 @@ function quit() {
 function deploy() {
   cd $CURR_DIR
   generate
+
+  cd $CURR_DIR
   git add source/_posts/* && git commit -m "Upload @`date +\"%y-%m-%d %H:%M:%S\"`" && git push origin source
-  wait
+
   git checkout master
   cd $CURR_DIR
   ls -a | grep -v "public" | grep -v "\."|xargs rm -rf
   cp -r public/* .
+
+  cd $CURR_DIR
   git add -A . && git commit -m "Deploy @`date +\"%y-%m-%d %H:%M:%S\"`" && git push origin master
-  wait
   git checkout source
 }
 
