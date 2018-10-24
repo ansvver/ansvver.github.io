@@ -99,6 +99,10 @@ case "$1" in
   -s|server)
     server
     ;;
+  -gs)
+    generate
+    server
+    ;;
   -w|write)
     quit
     write
