@@ -1,0 +1,113 @@
+#!/bin/bash
+
+set -x
+
+CURR_DIR=`cd $(dirname $0); pwd`
+CORE=$CURR_DIR/core
+POSTS=$CURR_DIR/source/_posts
+PUB=$CURR_DIR/public
+
+cd $CURR_DIR
+pyenv local anaconda3 || true
+
+function _init() {
+  cd $PUB
+  rm *.html || true
+  rm -r img || true
+  rm -r css || true
+  rm -r js || true
+  rm favicon.ico || true
+  rm robots.txt || true
+  rm custom.css || true
+
+  cd $POSTS
+  cp -r img $PUB || true
+
+
+  cd $POSTS/../
+  cp -r css $PUB || true
+  cp -r js $PUB || true
+  cp favicon.ico $PUB || true
+  cp robots.txt $PUB || true
+  cp custom.css $PUB || true
+}
+
+function _genHomePage() {
+  python3 $CORE/pages.py home
+}
+
+function _addComment() {
+  python3 $CORE/pages.py comment
+}
+
+function _genPosts() {
+  cd $POSTS
+  jupyter nbconvert --output-dir $PUB --to html *.ipynb
+  cd -
+}
+
+function generate() {
+  cd $CURR_DIR
+  _init
+  _genPosts
+  _addComment
+  _genHomePage
+  echo "generate done"
+}
+
+function server() {
+  cd $PUB
+  python -m http.server
+  cd -
+}
+
+function write() {
+  cd $POSTS
+  jupyter notebook &
+  cd -
+}
+
+function quit() {
+  ps -ef | grep "[j]upyter-notebook" | awk '{print $2}' | xargs kill
+}
+
+function deploy() {
+  cd $CURR_DIR
+  generate
+  git add source/_posts/* && git commit -m "Upload @`date +\"%y-%m-%d %H:%M:%S\"`" && git push origin source
+  wait
+  git checkout master
+  cd $CURR_DIR
+  cp -r public/* .
+  git add -A . && git commit -m "Deploy @`date +\"%y-%m-%d %H:%M:%S\"`" && git push origin master
+  wait
+  git checkout source
+}
+
+function echoUsage() {
+  echo "Usage $0 [-g|generate]"
+}
+
+case "$1" in
+  -g|generate)
+    generate
+    ;;
+  -s|server)
+    server
+    ;;
+  -w|write)
+    quit
+    write
+    ;;
+  -q|quit)
+    quit
+    ;;
+  -d|deploy)
+    quit
+    deploy
+    ;;
+  *)
+    echoUsage
+    exit 1
+    ;;
+esac
