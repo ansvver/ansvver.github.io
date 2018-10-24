@@ -40,12 +40,19 @@ class Pages(object):
                    'author': config.author, 'archives': archives}
 
         with open(os.path.join(self.output_dir, 'index.html'), 'w', encoding='utf-8') as home_f:
-            home_f.write(template.render(data=data))
+            home_html = template.render(data=data)
+            analytics_code = open(os.path.join(self.output_dir, '../templates/analytics.html'),
+                    'r', encoding='utf-8').read()
+            home_html = home_html.replace('<head><meta charset="utf-8" />', \
+                    '<head><meta charset="utf-8" />\n' + analytics_code)
+            home_f.write(home_html)
 
     def comment(self):
         f_list = os.listdir(self.output_dir)
         comment_code = open(os.path.join(self.output_dir, '../templates/comments.html'),
                             'r', encoding='utf-8').read()
+        analytics_code = open(os.path.join(self.output_dir, '../templates/analytics.html'),
+                'r', encoding='utf-8').read()
         for f0 in f_list:
             filename = os.path.join(self.output_dir, f0)
             if os.path.isfile(filename) and filename.endswith('.html') and f0 != 'index.html':
@@ -55,6 +62,8 @@ class Pages(object):
                     title = soup.find('h1').text.rstrip('¶')
                     text = re.sub('\<title\>.*?\<\/title\>', f'<title>{config.author} | {title}</title>', text)
                     text = text.replace('</body>', comment_code + '</body>')
+                    text = text.replace('<head><meta charset="utf-8" />', \
+                            '<head><meta charset="utf-8" />\n' + analytics_code)
                     f.seek(0)
                     f.write(text)
                     f.truncate()
