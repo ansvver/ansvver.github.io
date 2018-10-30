@@ -89,10 +89,13 @@ function deploy() {
 }
 
 function echoUsage() {
-  echo "Usage $0 [-g|generate]"
+  echo "Usage $0 [-h|-g|-s|-gs|-w|-q|-d]"
 }
 
 case "$1" in
+  -h|help)
+    echoUsage
+    ;;
   -g|generate)
     generate
     ;;

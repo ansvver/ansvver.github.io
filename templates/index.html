@@ -11785,7 +11785,7 @@ div#notebook {
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
     {% for a in data.archives %}
-        <li>{{ a.date }} <a href="{{ a.url }}">{{ a.title }}</a></li>
+    <li class="jnoteIndex">{{ a.date }} <a href="{{ a.url }}">{{ a.title }}</a> {% for t in a.tags %} {% if t == a.tags[-1] %}<code>{{ t }}</code>{% else %}<code>{{ t }}</code>, {% endif %}{% endfor %}</li>
     {% endfor %}
 </ul>
 

@@ -29,9 +29,13 @@ class Pages(object):
                 with open(f, 'r', encoding='utf-8') as post_f:
                     soup = BeautifulSoup(post_f.read(), 'lxml')
                     title = soup.find('h1').text.rstrip('¶')
-                    date = soup.find('h1').find_next('p').text
+                    ext_ele = soup.find('h1').find_next('p')
+                    date = ext_ele.contents[0]
+                    tags = []
+                    for t in ext_ele.find_all('code'):
+                        tags.append(t.text)
                     url = f0
-                    archives.append({'title': title, 'date': date, 'url': url})
+                    archives.append({'title': title, 'date': date, 'url': url, 'tags': tags})
 
         archives = sorted(archives, key=lambda x: x['date'], reverse=True)
 
