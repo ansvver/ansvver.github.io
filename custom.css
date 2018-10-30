@@ -1,0 +1,8 @@
+li.jnoteIndex code {
+    background-color: rgba(87, 87, 87, 0.2) !important;
+    font-size: 13px !important;
+}
+li.jnoteIndex {
+    line-height: 24px;
+    font-size: 15px;
+}
