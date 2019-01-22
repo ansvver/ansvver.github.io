@@ -44,12 +44,13 @@ function _genPosts() {
   cd $POSTS
   jupyter nbconvert --output-dir $PUB --to html *.ipynb
   cd -
+  [[ "$1" == "online" ]] && rm $PUB/draft*.html 1>/dev/null 2>&1
 }
 
 function generate() {
   cd $CURR_DIR
   _init
-  _genPosts
+  _genPosts $1
   _addComment
   _genHomePage
   echo "generate done"
@@ -73,7 +74,7 @@ function quit() {
 
 function deploy() {
   cd $CURR_DIR
-  generate
+  generate $1
 
   cd $CURR_DIR
   git add source/_posts/* && git commit -m "Upload @`date +\"%y-%m-%d %H:%M:%S\"`" && git push origin source
@@ -115,7 +116,7 @@ case "$1" in
     ;;
   -d|deploy)
     quit
-    deploy
+    deploy "online"
     ;;
   *)
     echoUsage
