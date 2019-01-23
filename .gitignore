@@ -106,3 +106,4 @@ venv.bak/
 .idea/
 public/
 .python-version
+.DS_Store

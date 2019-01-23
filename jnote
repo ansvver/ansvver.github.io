@@ -17,6 +17,7 @@ function _init() {
   rm -r css || true
   rm -r js || true
   rm favicon.ico || true
+  rm logo.png || true
   rm robots.txt || true
   rm custom.css || true
 
@@ -28,6 +29,7 @@ function _init() {
   cp -r css $PUB || true
   cp -r js $PUB || true
   cp favicon.ico $PUB || true
+  cp logo.png $PUB || true
   cp robots.txt $PUB || true
   cp custom.css $PUB || true
 }
