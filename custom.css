@@ -1,0 +1,12 @@
+li.jnoteIndex code {
+    background-color: rgba(0, 0, 0, 0.075) !important;
+    font-size: 11px !important;
+    padding: 2px !important;
+}
+li.jnoteIndex {
+    line-height: 24px;
+    font-size: 15px;
+}
+img#logo {
+    width: 200px;
+}
