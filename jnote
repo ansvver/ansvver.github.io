@@ -87,7 +87,7 @@ function deploy() {
   cp -r public/* .
 
   cd $CURR_DIR
-  git add -A . && git rm -rf --ignore-unmatch . && git commit -m "Deploy @`date +\"%y-%m-%d %H:%M:%S\"`" && git push origin master
+  git add -uA . && git commit -m "Deploy @`date +\"%y-%m-%d %H:%M:%S\"`" && git push origin master
   git checkout source
 }
 
