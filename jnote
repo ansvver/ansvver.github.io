@@ -5,7 +5,7 @@ set -x
 CURR_DIR=`cd $(dirname $0); pwd`
 CORE=$CURR_DIR/core
 POSTS=$CURR_DIR/source/_posts
-PUB=$CURR_DIR/public
+PUB=$CURR_DIR/public-cache
 
 cd $CURR_DIR
 pyenv local anaconda3 || true
@@ -79,12 +79,12 @@ function deploy() {
   generate $1
 
   cd $CURR_DIR
-  git add source/_posts/* && git commit -m "Upload @`date +\"%y-%m-%d %H:%M:%S\"`" && git push origin source
+  git add -A source/_posts/* && git commit -m "Upload @`date +\"%y-%m-%d %H:%M:%S\"`" && git push origin source
 
   git checkout master
   cd $CURR_DIR
-  ls -a | grep -v "public" | grep -v "\."|xargs rm -rf
-  cp -r public/* .
+  ls -a | grep -v "public-cache" | grep -v "\."|xargs rm -rf
+  cp -r public-cache public
 
   cd $CURR_DIR
   git add -A . && git commit -m "Deploy @`date +\"%y-%m-%d %H:%M:%S\"`" && git push origin master
