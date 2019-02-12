@@ -6,6 +6,7 @@ CURR_DIR=`cd $(dirname $0); pwd`
 CORE=$CURR_DIR/core
 POSTS=$CURR_DIR/source/_posts
 PUB=$CURR_DIR/public
+DROPBOX=/Users/ansvver/Dropbox/blog
 
 cd $CURR_DIR
 pyenv local anaconda3 || true
@@ -23,7 +24,6 @@ function _init() {
 
   cd $POSTS
   cp -r assets $PUB || true
-
 
   cd $POSTS/../
   cp -r css $PUB || true
@@ -47,6 +47,17 @@ function _genPosts() {
   jupyter nbconvert --output-dir $PUB --to html *.ipynb
   cd -
   [[ "$1" == "online" ]] && rm $PUB/draft*.html 1>/dev/null 2>&1
+}
+
+function export() {
+  cd $DROPBOX
+  rm -r assets || true
+  rm -r *.md || true
+
+  cd $POSTS
+  cp -r assets $DROPBOX || true
+  jupyter nbconvert --output-dir $DROPBOX --to markdown *.ipynb
+  echo "export done"
 }
 
 function generate() {
@@ -120,6 +131,9 @@ case "$1" in
   -d|deploy)
     quit
     deploy "online"
+    ;;
+  -ex|export)
+    export
     ;;
   *)
     echoUsage
