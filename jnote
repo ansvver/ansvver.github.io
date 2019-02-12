@@ -13,7 +13,7 @@ pyenv local anaconda3 || true
 function _init() {
   cd $PUB
   rm *.html || true
-  rm -r img || true
+  rm -r assets || true
   rm -r css || true
   rm -r js || true
   rm favicon.ico || true
@@ -22,7 +22,7 @@ function _init() {
   rm custom.css || true
 
   cd $POSTS
-  cp -r img $PUB || true
+  cp -r assets $PUB || true
 
 
   cd $POSTS/../
