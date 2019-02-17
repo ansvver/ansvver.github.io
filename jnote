@@ -90,7 +90,7 @@ function deploy() {
   generate $1
 
   cd $CURR_DIR
-  git add -A source/_posts/* && git commit -m "Upload @`date +\"%y-%m-%d %H:%M:%S\"`" && git push origin source
+  git add -u && git add -A source/_posts/* && git commit -m "Upload @`date +\"%y-%m-%d %H:%M:%S\"`" && git push origin source
 
   git checkout master
   cd $CURR_DIR
