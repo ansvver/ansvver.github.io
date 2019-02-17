@@ -7,6 +7,7 @@ from jinja2 import Environment, FileSystemLoader
 import config
 from bs4 import BeautifulSoup
 import re
+import datetime
 
 class Pages(object):
     """
@@ -40,7 +41,7 @@ class Pages(object):
         archives = sorted(archives, key=lambda x: x['date'], reverse=True)
 
         template = self.env.get_template('index.html')
-        data = {'title': config.title,
+        data = {'title': config.title, 'this_year': datetime.date.today().year,
                    'author': config.author, 'archives': archives}
 
         with open(os.path.join(self.output_dir, 'index.html'), 'w', encoding='utf-8') as home_f:
