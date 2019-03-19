@@ -11,7 +11,7 @@
   gtag('config', 'UA-128048896-1');
 </script>
 
-<title>ansvverのd機關</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>ansvver | BiMPM：一个句子匹配模型</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 <style type="text/css">
@@ -8461,15 +8461,15 @@ label {
 }
 /* Flexible box model classes */
 /* Taken from Alex Russell http://infrequently.org/2009/08/css-3-progress/ */
-/* This file is a compatability layer.  It allows the usage of flexible box
+/* This file is a compatability layer.  It allows the usage of flexible box 
 model layouts accross multiple browsers, including older browsers.  The newest,
 universal implementation of the flexible box model is used when available (see
-`Modern browsers` comments below).  Browsers that are known to implement this
+`Modern browsers` comments below).  Browsers that are known to implement this 
 new spec completely include:
 
     Firefox 28.0+
     Chrome 29.0+
-    Internet Explorer 11+
+    Internet Explorer 11+ 
     Opera 17.0+
 
 Browsers not listed, including Safari, are supported via the styling under the
@@ -11243,7 +11243,7 @@ div#pager .ui-resizable-handle {
   background: #f7f7f7;
   border-top: 1px solid #cfcfcf;
   border-bottom: 1px solid #cfcfcf;
-  /* This injects handle bars (a short, wide = symbol) for
+  /* This injects handle bars (a short, wide = symbol) for 
         the resize handle. */
 }
 div#pager .ui-resizable-handle::after {
@@ -11686,7 +11686,7 @@ ul.typeahead-list > li > a {
 .highlight .il { color: #666666 } /* Literal.Number.Integer.Long */
     </style>
 <style type="text/css">
-
+    
 /* Temporary definitions which will become obsolete with Notebook release 5.0 */
 .ansi-black-fg { color: #3E424D; }
 .ansi-black-bg { background-color: #3E424D; }
@@ -11740,14 +11740,14 @@ div#notebook {
   div.cell {
     display: block;
     page-break-inside: avoid;
-  }
-  div.output_wrapper {
+  } 
+  div.output_wrapper { 
     display: block;
-    page-break-inside: avoid;
+    page-break-inside: avoid; 
   }
-  div.output {
+  div.output { 
     display: block;
-    page-break-inside: avoid;
+    page-break-inside: avoid; 
   }
 }
 </style>
@@ -11785,27 +11785,8 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-    <!--<h1 id="ansvverのd機關">ansvverのd機關<a class="anchor-link" href="#ansvverのd機關">&#182;</a></h1>-->
-<p><img id="logo" src="logo.png" alt="ansvverのd機關"></p>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-    
-    <li class="jnoteIndex">2018-03-21
-&nbsp;<a href="BiMPM.html">BiMPM：一个句子匹配模型</a>&nbsp;&nbsp; <code>BiMPM</code>,  <code>PyTorch</code></li>
-    
-    <li class="jnoteIndex">2018-02-15
-&nbsp;<a href="lstm_crf_ner.html">bi-LSTM + CRF 序列标注</a>&nbsp;&nbsp; <code>NLP</code>,  <code>LSTM</code>,  <code>NER</code>,  <code>CNN</code></li>
-    
-    <li class="jnoteIndex">2018-01-23
-&nbsp;<a href="Frequency_and_Bayes.html">频率派与贝叶斯派</a>&nbsp;&nbsp; <code>ML</code></li>
-    
-</ul>
+<h1 id="BiMPM&#65306;&#19968;&#20010;&#21477;&#23376;&#21305;&#37197;&#27169;&#22411;">BiMPM&#65306;&#19968;&#20010;&#21477;&#23376;&#21305;&#37197;&#27169;&#22411;<a class="anchor-link" href="#BiMPM&#65306;&#19968;&#20010;&#21477;&#23376;&#21305;&#37197;&#27169;&#22411;">&#182;</a></h1><p>2018-03-21
+<code>BiMPM</code>, <code>PyTorch</code></p>
 
 </div>
 </div>
@@ -11814,16 +11795,490 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Copyright ©2018-2019 ansvver</p>
+<p>论文链接： <em><a href="https://arxiv.org/abs/1702.03814">Bilateral Multi-Perspective Matching for Natural Language Sentences</a></em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>自然语言句子匹配(Natural language sentence matching, NLSM) 技术的主要目的是比较两个句子并找出它们之间的关系。</p>
+<p>基于此，可应用于多种场景任务下，比如在自然语言推理中，可以用来推测两个句子是否存在推断与前提的关系；在qa对问答场景中，可以用来判断问句与答案之前的匹配关系，以及对多个答案进行排序；在搜索场景中，可以用来匹配query与文档片段的对应关系等等。</p>
+<p>随着神经网络的发展，对NLSM所提出的模型大致可以分为两大类：</p>
+<ul>
+<li>第一类叫<em>孪生网络(Siamese Networks)</em>，通过构建相同的网络结构对输入的句子对进行编码（如<code>CNN</code>或<code>RNN</code>），进而单独对得到的两个空间向量进行匹配度量；</li>
+<li>第二类个人称之为<em>交互匹配网络(Matching-aggregation Networks)</em>，这类网络通常以字符级或上下文对两句子做匹配，然后对匹配的结果使用网络结构（如<code>CNN</code>或<code>LSTM</code>）进行融合，最后对编码出的一个向量做决策。</li>
+</ul>
+<p>第一类的优点是相同网络参数共享使得网络的规模更小和便于训练，得出的（两个）向量可以直接用于可视化、其他聚类分类等；缺点是两个句子间在encode的阶段是相互独立（无信息交互），这导致训练过程可以会丢失某些重要的信息。</p>
+<p>第二类模型通过在训练过程中加入两个句子间的“匹配交互”，这使得效果较第一类能更好一些。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>BIMPM 属于第二类模型。该论文提出一种双边多视角匹配（Bilateral Multi-Perspective Matching, BiMPM）模型用于句子匹配。</p>
+<p>论文通过大量实验表明BiMPM模型在不同类型的句子匹配数据集上都达到了比较好的效果，包括在Quora数据集上的释义识别（paraphrase identification）任务， 在SNLI 数据集上的自然语言推理（natural language inference）任务，以及在TREC-QA和 WikiQA数据集上的答案句子选择（answer sentence selection）任务，从而说明BiMPM模型的实用性。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="BiMPM">BiMPM<a class="anchor-link" href="#BiMPM">&#182;</a></h2><p>算法流程描述：</p>
+<ol>
+<li>给定两个句子P与Q，使用双向LSTM对它们分别进行编码；</li>
+<li>对这两个编码后的句子从 P → Q 以及 P ← Q 两个过程进行匹配，以 P → Q 过程为例（P ← Q 过程相似），Q的每个time-step都对P的所有time-steps，在多个视角下进行匹配；</li>
+<li>使用另一个BiLSTM来聚合匹配的结果到一个固定长度的匹配向量里；</li>
+<li>最后通过一个全链接层完成最终的匹配结果映射。</li>
+</ol>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>模型结果概图如下：</p>
+<p><img src="assets/BiMPM.png" alt="BiMPM"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>PyTorch 模型初始化如下：</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BIMPM</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BIMPM</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">word_dim</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">use_char_emb</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">char_hidden_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">num_perspective</span>
+
+        <span class="c1"># ----- Word Representation Layer -----</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">char_emb</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">char_vocab_size</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">char_dim</span><span class="p">,</span> <span class="n">padding_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">word_emb</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">word_vocab_size</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">word_dim</span><span class="p">)</span>
+        <span class="c1"># initialize word embedding with GloVe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">word_emb</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">TEXT</span><span class="o">.</span><span class="n">vocab</span><span class="o">.</span><span class="n">vectors</span><span class="p">)</span>
+        <span class="c1"># no fine-tuning for word vectors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">word_emb</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="bp">False</span>  <span class="c1"># 这里词向量直接使用训练好的向量模型，不再重新训练</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">char_LSTM</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span>
+            <span class="n">input_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">char_dim</span><span class="p">,</span>
+            <span class="n">hidden_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">char_hidden_size</span><span class="p">,</span>
+            <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">bidirectional</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+            <span class="n">batch_first</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># 使用一个单向LSTM训练字向量</span>
+
+        <span class="c1"># ----- Context Representation Layer -----</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context_LSTM</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span>
+            <span class="n">input_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">,</span>
+            <span class="n">hidden_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
+            <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">bidirectional</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">batch_first</span><span class="o">=</span><span class="bp">True</span>
+        <span class="p">)</span>  <span class="c1"># 使用双向LSTM训练上下文表达层</span>
+
+        <span class="c1"># ----- Matching Layer -----</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="s1">&#39;mp_w{i}&#39;</span><span class="p">,</span>
+                    <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">l</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)))</span>  <span class="c1"># 存放8个Matching结果</span>
+
+        <span class="c1"># ----- Aggregation Layer -----</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aggregation_LSTM</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span>
+            <span class="n">input_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">l</span> <span class="o">*</span> <span class="mi">8</span><span class="p">,</span>
+            <span class="n">hidden_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span>
+            <span class="n">num_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">bidirectional</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">batch_first</span><span class="o">=</span><span class="bp">True</span>
+        <span class="p">)</span>  <span class="c1"># 同样使用双向LSTM训练融合层</span>
+
+        <span class="c1"># ----- Prediction Layer -----</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pred_fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pred_fc2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">class_size</span><span class="p">)</span>  <span class="c1"># 最后是接两个全连接层</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_parameters</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">dropout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">dropout</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">training</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面将根据模型的各个layer进行分析介绍。</p>
+<h3 id="1.-Word-Representation-Layer">1. Word Representation Layer<a class="anchor-link" href="#1.-Word-Representation-Layer">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>输入编码层：使用LSTM，对字向量进行编码，然后与词向量拼接在一起，最后保持向量个数与对应的句子序列长度相等。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="c1"># (batch, seq_len) -&gt; (batch, seq_len, word_dim)</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">word_emb</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">])</span>  <span class="c1"># p for premise, 当然不同任务可有不同理解</span>
+<span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">word_emb</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">])</span>  <span class="c1"># h for hypothesis</span>
+
+<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">use_char_emb</span><span class="p">:</span>
+    <span class="c1"># (batch, seq_len, max_word_len) -&gt; (batch * seq_len, max_word_len)</span>
+    <span class="n">seq_len_p</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;char_p&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">seq_len_h</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;char_h&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">char_p</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;char_p&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">max_word_len</span><span class="p">)</span>
+    <span class="n">char_h</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;char_h&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">max_word_len</span><span class="p">)</span>
+
+    <span class="c1"># (batch * seq_len, max_word_len, char_dim)-&gt; (1, batch * seq_len, char_hidden_size)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">char_p</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">char_LSTM</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">char_emb</span><span class="p">(</span><span class="n">char_p</span><span class="p">))</span>
+    <span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">char_h</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">char_LSTM</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">char_emb</span><span class="p">(</span><span class="n">char_h</span><span class="p">))</span>
+
+    <span class="c1"># (batch, seq_len, char_hidden_size)</span>
+    <span class="n">char_p</span> <span class="o">=</span> <span class="n">char_p</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">seq_len_p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">char_hidden_size</span><span class="p">)</span>
+    <span class="n">char_h</span> <span class="o">=</span> <span class="n">char_h</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">seq_len_h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">char_hidden_size</span><span class="p">)</span>
+
+    <span class="c1"># (batch, seq_len, word_dim + char_hidden_size)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">p</span><span class="p">,</span> <span class="n">char_p</span><span class="p">],</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">h</span><span class="p">,</span> <span class="n">char_h</span><span class="p">],</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="2.-Context-Representation-Layer">2. Context Representation Layer<a class="anchor-link" href="#2.-Context-Representation-Layer">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>上下文表示层：对上一步得到的编码序列使用<code>BiLSTM</code>使之加入序列上下文信息。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="c1"># ----- Context Representation Layer -----</span>
+<span class="c1"># (batch, seq_len, hidden_size * 2)</span>
+<span class="n">con_p</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_LSTM</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="n">con_h</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_LSTM</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+<span class="n">con_p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">con_p</span><span class="p">)</span>
+<span class="n">con_h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">con_h</span><span class="p">)</span>
+
+<span class="c1"># (batch, seq_len, hidden_size)</span>
+<span class="n">con_p_fw</span><span class="p">,</span> <span class="n">con_p_bw</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">con_p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">con_h_fw</span><span class="p">,</span> <span class="n">con_h_bw</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">con_h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="3.-Matching-Layer">3. Matching Layer<a class="anchor-link" href="#3.-Matching-Layer">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>匹配层：这是此模块的核心层。</p>
+<p>其目的是取句子中每一个上下文 embedding (time-step) 与另一句子中所有上下文 embedding (time-step) 作比较。最后输出两个匹配的 embedding。</p>
+<p>首先，定义多视角函数</p>
+<p>$$m = f_m(v_1, v_2; W)$$</p>
+<p>其中$f_m$的输入是两个维度为$d$的向量$v1, v2$，输出是一个$l$维的向量$m$, $l$为视角维度，$W$是大小为$l\times d$可训练的参数。具体地，向量$m$的第k个维度</p>
+<p>$$m_k=cosine(W_k \circ v_1, W_k \circ v_2)$$</p>
+<p>其中$\circ$是element-wise乘法（对位相乘）， $k \in [1,l]$。</p>
+<p>基于$f_m$，采取如下四种匹配策略得到4个匹配向量$m$：</p>
+<p><img src="assets/BiMPM_matching.png" alt="BiMPM_matching"></p>
+<ul>
+<li>全匹配 (Full-Matching)：句子$P$的当前时刻的上下文表示层前向隐藏层向量（后向隐藏层向量）与另一个句子Q的上下文表示层的最后一个向量（第一个向量）作为$f_m$输入（因为上下文表示层是双向LSTM）。</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># 1. Full-Matching</span>
+
+<span class="c1"># (batch, seq_len, hidden_size), (batch, hidden_size)</span>
+<span class="c1"># -&gt; (batch, seq_len, l)</span>
+<span class="n">mv_p_full_fw</span> <span class="o">=</span> <span class="n">mp_matching_func</span><span class="p">(</span><span class="n">con_p_fw</span><span class="p">,</span> <span class="n">con_h_fw</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">mp_w1</span><span class="p">)</span>
+<span class="n">mv_p_full_bw</span> <span class="o">=</span> <span class="n">mp_matching_func</span><span class="p">(</span><span class="n">con_p_bw</span><span class="p">,</span> <span class="n">con_h_bw</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">mp_w2</span><span class="p">)</span>
+<span class="n">mv_h_full_fw</span> <span class="o">=</span> <span class="n">mp_matching_func</span><span class="p">(</span><span class="n">con_h_fw</span><span class="p">,</span> <span class="n">con_p_fw</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">mp_w1</span><span class="p">)</span>
+<span class="n">mv_h_full_bw</span> <span class="o">=</span> <span class="n">mp_matching_func</span><span class="p">(</span><span class="n">con_h_bw</span><span class="p">,</span> <span class="n">con_p_bw</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">mp_w2</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">mp_matching_func</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param v1: (batch, seq_len, hidden_size)</span>
+<span class="sd">    :param v2: (batch, seq_len, hidden_size) or (batch, hidden_size)</span>
+<span class="sd">    :param w: (l, hidden_size)</span>
+<span class="sd">    :return: (batch, l)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">seq_len</span> <span class="o">=</span> <span class="n">v1</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># (1, 1, hidden_size, l)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># (batch, seq_len, hidden_size, l)</span>
+    <span class="n">v1</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">v1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">l</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v2</span><span class="o">.</span><span class="n">size</span><span class="p">())</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">v2</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">v2</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">l</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">v2</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">v2</span><span class="p">]</span> <span class="o">*</span> <span class="n">seq_len</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">l</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="n">m</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">cosine_similarity</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">m</span>
+</pre></div>
+<ul>
+<li>最大池化匹配 (Maxpooling-Matching)：句子$P$的当前时刻的上下文表示层向量与另一个句子Q的上下文表示层的所有向量分别作为$f_m$输入，然后对所有输出进行maxpooling。</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># 2. Maxpooling-Matching</span>
+
+<span class="c1"># (batch, seq_len1, seq_len2, l)</span>
+<span class="n">mv_max_fw</span> <span class="o">=</span> <span class="n">mp_matching_func_pairwise</span><span class="p">(</span><span class="n">con_p_fw</span><span class="p">,</span> <span class="n">con_h_fw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mp_w3</span><span class="p">)</span>
+<span class="n">mv_max_bw</span> <span class="o">=</span> <span class="n">mp_matching_func_pairwise</span><span class="p">(</span><span class="n">con_p_bw</span><span class="p">,</span> <span class="n">con_h_bw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mp_w4</span><span class="p">)</span>
+
+<span class="c1"># (batch, seq_len, l)</span>
+<span class="n">mv_p_max_fw</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mv_max_fw</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">mv_p_max_bw</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mv_max_bw</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">mv_h_max_fw</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mv_max_fw</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">mv_h_max_bw</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mv_max_bw</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">div_with_small_value</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+    <span class="c1"># too small values are replaced by 1e-8 to prevent it from exploding.</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">d</span> <span class="o">*</span> <span class="p">(</span><span class="n">d</span> <span class="o">&gt;</span> <span class="n">eps</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="o">+</span> <span class="n">eps</span> <span class="o">*</span> <span class="p">(</span><span class="n">d</span> <span class="o">&lt;=</span> <span class="n">eps</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">n</span> <span class="o">/</span> <span class="n">d</span>
+
+
+<span class="k">def</span> <span class="nf">mp_matching_func_pairwise</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param v1: (batch, seq_len1, hidden_size)</span>
+<span class="sd">    :param v2: (batch, seq_len2, hidden_size)</span>
+<span class="sd">    :param w: (l, hidden_size)</span>
+<span class="sd">    :return: (batch, l, seq_len1, seq_len2)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># (1, l, 1, hidden_size)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c1"># (batch, l, seq_len, hidden_size)</span>
+    <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">v1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">l</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">w</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">v2</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">l</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># (batch, l, seq_len, hidden_size-&gt;1)</span>
+    <span class="n">v1_norm</span> <span class="o">=</span> <span class="n">v1</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">v2_norm</span> <span class="o">=</span> <span class="n">v2</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c1"># (batch, l, seq_len1, seq_len2)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">v1_norm</span> <span class="o">*</span> <span class="n">v2_norm</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="c1"># (batch, seq_len1, seq_len2, l)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">div_with_small_value</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">m</span>
+</pre></div>
+<ul>
+<li>注意力匹配 (Attentive-Matching)：首先根据句子$P$当前时刻的上下文表示向量对句子$Q$进行注意力权重计算，然后对$Q$的所有向量进行加权平均得到一个向量表示，再将句子$P$当前时刻的上下文表示向量与$Q$的注意力向量作为$f_m$的输入。其中论文采取$cosine$作为注意力权重计算的函数。</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># 3. Attentive-Matching</span>
+
+<span class="c1"># (batch, seq_len1, seq_len2)</span>
+<span class="n">att_fw</span> <span class="o">=</span> <span class="n">attention</span><span class="p">(</span><span class="n">con_p_fw</span><span class="p">,</span> <span class="n">con_h_fw</span><span class="p">)</span>
+<span class="n">att_bw</span> <span class="o">=</span> <span class="n">attention</span><span class="p">(</span><span class="n">con_p_bw</span><span class="p">,</span> <span class="n">con_h_bw</span><span class="p">)</span>
+
+<span class="c1"># (batch, seq_len2, hidden_size) -&gt; (batch, 1, seq_len2, hidden_size)</span>
+<span class="c1"># (batch, seq_len1, seq_len2) -&gt; (batch, seq_len1, seq_len2, 1)</span>
+<span class="c1"># -&gt; (batch, seq_len1, seq_len2, hidden_size)</span>
+<span class="n">att_h_fw</span> <span class="o">=</span> <span class="n">con_h_fw</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">att_fw</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">att_h_bw</span> <span class="o">=</span> <span class="n">con_h_bw</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">att_bw</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1"># (batch, seq_len1, hidden_size) -&gt; (batch, seq_len1, 1, hidden_size)</span>
+<span class="c1"># (batch, seq_len1, seq_len2) -&gt; (batch, seq_len1, seq_len2, 1)</span>
+<span class="c1"># -&gt; (batch, seq_len1, seq_len2, hidden_size)</span>
+<span class="n">att_p_fw</span> <span class="o">=</span> <span class="n">con_p_fw</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">att_fw</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">att_p_bw</span> <span class="o">=</span> <span class="n">con_p_bw</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">att_bw</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># (batch, seq_len1, hidden_size) / (batch, seq_len1, 1) -&gt; (batch, seq_len1, hidden_size)</span>
+<span class="n">att_mean_h_fw</span> <span class="o">=</span> <span class="n">div_with_small_value</span><span class="p">(</span><span class="n">att_h_fw</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">att_fw</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+<span class="n">att_mean_h_bw</span> <span class="o">=</span> <span class="n">div_with_small_value</span><span class="p">(</span><span class="n">att_h_bw</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">att_bw</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+
+<span class="c1"># (batch, seq_len2, hidden_size) / (batch, seq_len2, 1) -&gt; (batch, seq_len2, hidden_size)</span>
+<span class="n">att_mean_p_fw</span> <span class="o">=</span> <span class="n">div_with_small_value</span><span class="p">(</span><span class="n">att_p_fw</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">att_fw</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">att_mean_p_bw</span> <span class="o">=</span> <span class="n">div_with_small_value</span><span class="p">(</span><span class="n">att_p_bw</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">att_bw</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="c1"># (batch, seq_len, l)</span>
+<span class="n">mv_p_att_mean_fw</span> <span class="o">=</span> <span class="n">mp_matching_func</span><span class="p">(</span><span class="n">con_p_fw</span><span class="p">,</span> <span class="n">att_mean_h_fw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mp_w5</span><span class="p">)</span>
+<span class="n">mv_p_att_mean_bw</span> <span class="o">=</span> <span class="n">mp_matching_func</span><span class="p">(</span><span class="n">con_p_bw</span><span class="p">,</span> <span class="n">att_mean_h_bw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mp_w6</span><span class="p">)</span>
+<span class="n">mv_h_att_mean_fw</span> <span class="o">=</span> <span class="n">mp_matching_func</span><span class="p">(</span><span class="n">con_h_fw</span><span class="p">,</span> <span class="n">att_mean_p_fw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mp_w5</span><span class="p">)</span>
+<span class="n">mv_h_att_mean_bw</span> <span class="o">=</span> <span class="n">mp_matching_func</span><span class="p">(</span><span class="n">con_h_bw</span><span class="p">,</span> <span class="n">att_mean_p_bw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mp_w6</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">attention</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param v1: (batch, seq_len1, hidden_size)</span>
+<span class="sd">    :param v2: (batch, seq_len2, hidden_size)</span>
+<span class="sd">    :return: (batch, seq_len1, seq_len2)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># (batch, seq_len1, 1)</span>
+    <span class="n">v1_norm</span> <span class="o">=</span> <span class="n">v1</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c1"># (batch, 1, seq_len2)</span>
+    <span class="n">v2_norm</span> <span class="o">=</span> <span class="n">v2</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># (batch, seq_len1, seq_len2)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">bmm</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">v1_norm</span> <span class="o">*</span> <span class="n">v2_norm</span>
+
+    <span class="k">return</span> <span class="n">div_with_small_value</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+</pre></div>
+<ul>
+<li>最大注意力匹配 (Max-Attentive-Matching)：和注意力匹配策略基本类似，区别是加权平均变成了取最大。</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="c1"># 4. Max-Attentive-Matching</span>
+
+<span class="c1"># (batch, seq_len1, hidden_size)</span>
+<span class="n">att_max_h_fw</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">att_h_fw</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">att_max_h_bw</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">att_h_bw</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># (batch, seq_len2, hidden_size)</span>
+<span class="n">att_max_p_fw</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">att_p_fw</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">att_max_p_bw</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">att_p_bw</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># (batch, seq_len, l)</span>
+<span class="n">mv_p_att_max_fw</span> <span class="o">=</span> <span class="n">mp_matching_func</span><span class="p">(</span><span class="n">con_p_fw</span><span class="p">,</span> <span class="n">att_max_h_fw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mp_w7</span><span class="p">)</span>
+<span class="n">mv_p_att_max_bw</span> <span class="o">=</span> <span class="n">mp_matching_func</span><span class="p">(</span><span class="n">con_p_bw</span><span class="p">,</span> <span class="n">att_max_h_bw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mp_w8</span><span class="p">)</span>
+<span class="n">mv_h_att_max_fw</span> <span class="o">=</span> <span class="n">mp_matching_func</span><span class="p">(</span><span class="n">con_h_fw</span><span class="p">,</span> <span class="n">att_max_p_fw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mp_w7</span><span class="p">)</span>
+<span class="n">mv_h_att_max_bw</span> <span class="o">=</span> <span class="n">mp_matching_func</span><span class="p">(</span><span class="n">con_h_bw</span><span class="p">,</span> <span class="n">att_max_p_bw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mp_w8</span><span class="p">)</span>
+</pre></div>
+<p>最终，$P$对$Q$进行匹配可以得到一组向量，向量个数等于$P$的长度， 向量维度是$l\times 8$（4种匹配策略，双向LSTM），同理，$Q$对$P$进行匹配也可以得到一组向量。</p>
+<div class="highlight"><pre><span></span><span class="c1"># (batch, seq_len, l * 8)</span>
+<span class="n">mv_p</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">mv_p_full_fw</span><span class="p">,</span> <span class="n">mv_p_max_fw</span><span class="p">,</span> <span class="n">mv_p_att_mean_fw</span><span class="p">,</span> <span class="n">mv_p_att_max_fw</span><span class="p">,</span>
+     <span class="n">mv_p_full_bw</span><span class="p">,</span> <span class="n">mv_p_max_bw</span><span class="p">,</span> <span class="n">mv_p_att_mean_bw</span><span class="p">,</span> <span class="n">mv_p_att_max_bw</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">mv_h</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">mv_h_full_fw</span><span class="p">,</span> <span class="n">mv_h_max_fw</span><span class="p">,</span> <span class="n">mv_h_att_mean_fw</span><span class="p">,</span> <span class="n">mv_h_att_max_fw</span><span class="p">,</span>
+     <span class="n">mv_h_full_bw</span><span class="p">,</span> <span class="n">mv_h_max_bw</span><span class="p">,</span> <span class="n">mv_h_att_mean_bw</span><span class="p">,</span> <span class="n">mv_h_att_max_bw</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">mv_p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">mv_p</span><span class="p">)</span>
+<span class="n">mv_h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">mv_h</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="4.-Aggregation-Layer">4. Aggregation Layer<a class="anchor-link" href="#4.-Aggregation-Layer">&#182;</a></h3><p>聚集层：使用另一个 BiLSTM，对匹配层得到的两组向量序列分别进行建模，并且都取最后时刻的向量。因此最终得到4个向量（两组*双向），将这4个向量连结作为输出。</p>
+<div class="highlight"><pre><span></span><span class="c1"># ----- Aggregation Layer -----</span>
+<span class="c1"># (batch, seq_len, l * 8) -&gt; (2, batch, hidden_size)</span>
+<span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">agg_p_last</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggregation_LSTM</span><span class="p">(</span><span class="n">mv_p</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="p">(</span><span class="n">agg_h_last</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggregation_LSTM</span><span class="p">(</span><span class="n">mv_h</span><span class="p">)</span>
+
+<span class="c1"># 2 * (2, batch, hidden_size) -&gt; 2 * (batch, hidden_size * 2) -&gt; (batch, hidden_size * 4)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">agg_p_last</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span>
+     <span class="n">agg_h_last</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="5.-Prediction-Layer">5. Prediction Layer<a class="anchor-link" href="#5.-Prediction-Layer">&#182;</a></h3><p>预测层：通过两层全连接+softmax作为分类器, 激活函数使用$tanh$。</p>
+<div class="highlight"><pre><span></span><span class="c1"># ----- Prediction Layer -----</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pred_fc1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_fc2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="&#24635;&#32467;">&#24635;&#32467;<a class="anchor-link" href="#&#24635;&#32467;">&#182;</a></h1><p>BiMPM 模型如其名，在训练过程中考虑了许多方面，比如 Word Representation Layer 加入字符级的信息，Matching Layer 提出多个 Matching 的思路，Aggregation Layer 使用到了双向的LSTM使得两个序列充分学习到上下文的信息，但从另一个角度来看也同时使得模型训练的耗时更高。</p>
+<h3 id="&#23436;&#25972;&#20195;&#30721;">&#23436;&#25972;&#20195;&#30721;<a class="anchor-link" href="#&#23436;&#25972;&#20195;&#30721;">&#182;</a></h3><p><a href="https://github.com/galsang/BIMPM-pytorch">galsang/BIMPM-pytorch</a></p>
 
 </div>
 </div>
 </div>
     </div>
   </div>
+<div id="gitment-container" class="container"></div>
+<link rel="stylesheet" href="css/gitment.css?v=0.0.0"><script src="js/gitment.browser.js?v=0.0.0"></script>
+<script>
+    const gitment = new GitmentBrowser({
+        //id: '', // optional
+        owner: 'ansvver',
+        repo: 'ansvver.github.io',
+        oauth: {
+            client_id: 'd83ac015fb516c998b72',
+            client_secret: 'd18e99d572502728f4509ae4ddd16db173b39a3d',
+        },
+        // ...
+        // For more available options, check out the documentation below
+    })
+    gitment.render('gitment-container')
+</script>
+<!--
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Copyright ©2019 ansvver</p>
+</div>
+</div>
+</div>
+-->
 </body>
 
-
+ 
 
 
 </html>
