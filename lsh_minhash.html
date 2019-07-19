@@ -13127,7 +13127,7 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="&#23616;&#37096;&#25935;&#24863;&#21704;&#24076;---MinHash">&#23616;&#37096;&#25935;&#24863;&#21704;&#24076; - MinHash<a class="anchor-link" href="#&#23616;&#37096;&#25935;&#24863;&#21704;&#24076;---MinHash">&#182;</a></h1><p>2018-05-15
-<code>LSH</code>, <code>MinHash</code>, <code>SimHash</code></p>
+<code>LSH</code>, <code>MinHash</code></p>
 
 </div>
 </div>
@@ -13691,6 +13691,25 @@ result:
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>将桶设置为一般的hash 函数，比如说md5,sha256 等等。</p>
+<p>这个时候记录列号，我们把hash 值作为我们字典的键，把列号作为值来计算。</p>
+<p>一个字典里面如果，一个键对应的元素是大于两个的，则认为找到了相似的样本。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="&#24635;&#32467;">&#24635;&#32467;<a class="anchor-link" href="#&#24635;&#32467;">&#182;</a></h2><p>MinHash 可以看作是一个数据降维再哈希的过程，其降维的依据是Jaccard相似度的一个近似。</p>
+<p>在实际工程中，hash方法的选择也很重要，可选择如<a href="https://en.wikipedia.org/wiki/MurmurHash">MurmurHash</a></p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
