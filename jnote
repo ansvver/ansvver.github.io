@@ -107,6 +107,10 @@ function echoUsage() {
   echo "Usage $0 [-h|-g|-s|-gs|-w|-q|-d]"
 }
 
+function resize() {
+  python3 $CORE/resize.py $1
+}
+
 case "$1" in
   -h|help)
     echoUsage
@@ -134,6 +138,9 @@ case "$1" in
     ;;
   -ex|export)
     export
+    ;;
+  -rz|resize)
+    resize $2
     ;;
   *)
     echoUsage
