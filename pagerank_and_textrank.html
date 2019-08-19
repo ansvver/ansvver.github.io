@@ -13581,10 +13581,9 @@ $$
 <div id="gitment-container" class="container"></div>
 <link rel="stylesheet" href="css/gitment.css?v=0.0.0"><script src="js/gitment.browser.js?v=0.0.0"></script>
 <script>
-    var str='{{ page.date | date: "%Y-%m-%d" }} {{ page.title }}';
-    var id = str;
-    if(str.length>=45){
-        id=str.substring(0,45)+"...";
+    var id = window.location.href
+    if(id.length>=45){
+        id=id.substring(0,45)+"...";
     }
     const gitment = new GitmentBrowser({
         id: id, // optional
