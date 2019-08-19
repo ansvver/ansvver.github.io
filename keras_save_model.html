@@ -13679,8 +13679,13 @@ Epoch 00020: val_loss did not improve from 2.26748
 <div id="gitment-container" class="container"></div>
 <link rel="stylesheet" href="css/gitment.css?v=0.0.0"><script src="js/gitment.browser.js?v=0.0.0"></script>
 <script>
+    var str='{{ page.date | date: "%Y-%m-%d" }} {{ page.title }}';
+    var id = str;
+    if(str.length>=45){
+        id=str.substring(0,45)+"...";
+    }
     const gitment = new GitmentBrowser({
-        //id: '', // optional
+        id: id, // optional
         owner: 'ansvver',
         repo: 'ansvver.github.io',
         oauth: {
