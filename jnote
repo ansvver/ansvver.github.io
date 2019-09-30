@@ -104,7 +104,7 @@ function deploy() {
 }
 
 function echoUsage() {
-  echo "Usage $0 [-h|-g|-s|-gs|-w|-q|-d]"
+  echo "Usage $0 [-h|-g|-s|-gs|-w|-q|-d|-rz]"
 }
 
 function resize() {
